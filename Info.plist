@@ -1,0 +1,4 @@
+<key>NSPhotoLibraryUsageDescription</key>
+<string>$(PRODUCT_NAME) precisa acessar sua galeria</string>
+<key>NSCameraUsageDescription</key>
+<string>$(PRODUCT_NAME) precisa usar sua câmera</string>

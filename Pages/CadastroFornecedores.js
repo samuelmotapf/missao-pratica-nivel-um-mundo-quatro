@@ -1,17 +1,36 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, ScrollView, Image } from 'react-native';
 import { useFornecedores } from '../Context/FornecedoresContext';
+import { launchImageLibrary } from 'react-native-image-picker';
 
 const CadastroFornecedores = ({ navigation }) => {
   const [nome, setNome] = useState('');
   const [endereco, setEndereco] = useState('');
   const [contato, setContato] = useState('');
   const [categorias, setCategorias] = useState('');
+  const [imageUri, setImageUri] = useState('');
+
+  const selectImage = () => {
+    const options = {
+      mediaType: 'photo',
+      quality: 1
+    };
+
+    launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.errorCode) {
+        console.log('ImagePicker Error: ', response.errorCode);
+      } else if (response.assets) {
+        setImageUri(response.assets[0].uri);
+      }
+    });
+  }
 
   const { addFornecedor } = useFornecedores();
 
   const handleSubmit = () => {
-    addFornecedor({ nome, endereco, contato, categorias });
+    addFornecedor({ nome, endereco, contato, categorias, imageUri });
     alert('Fornecedor Cadastrado!');
     navigation.navigate('ListaFornecedores');
   };
@@ -46,6 +65,10 @@ const CadastroFornecedores = ({ navigation }) => {
         onChangeText={setCategorias}
       />
 
+      <Text style={styles.label}>Foto do Fornecedor:</Text>
+      <Button title="Selecionar Imagem" onPress={selectImage} />
+      {imageUri ? <Image source={{ uri: imageUri }} style={styles.image} /> : null}
+
       <Button
         title="Cadastrar Fornecedor"
         onPress={handleSubmit}
@@ -68,6 +91,11 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     borderWidth: 1,
     padding: 10,
+  },
+  image: {
+    width: 100,
+    height: 100,
+    marginBottom: 20
   },
 });
 
