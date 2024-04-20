@@ -1,39 +1,41 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { FornecedoresProvider } from './Context/FornecedoresContext';
+import HomeScreen from './Pages/HomeScreen';
+import CadastroFornecedores from './Pages/CadastroFornecedores';
+import ListaFornecedores from './Pages/ListaFornecedores';
 
-import ImageViewer from './components/ImageViewer';
-import Cat from './components/Name';
+const Stack = createStackNavigator();
 
-const sourceImageCat=require("./assets/Images/cat.jpeg");
-
-export default function App() {
+function MyStack() {
   return (
-    <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        <ImageViewer imageSource={sourceImageCat}/>    
-      </View>
-      <View style={styles.textContainer}>
-        <Cat/>   
-      </View>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Stack.Navigator initialRouteName="Home">
+      <Stack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{ title: 'Tela Inicial' }}
+      />
+      <Stack.Screen
+        name="CadastroFornecedores"
+        component={CadastroFornecedores}
+        options={{ title: 'Cadastro de Fornecedores' }}
+      />
+      <Stack.Screen
+        name="ListaFornecedores"
+        component={ListaFornecedores}
+        options={{ title: 'Lista de Fornecedores' }}
+      />
+    </Stack.Navigator>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  imageContainer: {
-    flex: 1,
-    paddingTop: 20,
-  },
-  textContainer: {
-    flex: 1/3,
-    alignItems: 'center'
-  }
-});
+export default function App() {
+  return (
+    <NavigationContainer>
+      <FornecedoresProvider>
+        <MyStack />
+      </FornecedoresProvider>
+    </NavigationContainer>
+  );
+}
